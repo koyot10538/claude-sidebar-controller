@@ -3,7 +3,8 @@
 
   // Default configuration values
   const DEFAULT_CONFIG = {
-    enabled: true,
+    hoverEnabled: true,
+    shortcutEnabled: true,
     hoverDelay: 200,
     collapseDelay: 500,
     debug: false  // Debug mode disabled by default
@@ -35,7 +36,7 @@
   chrome.storage.sync.get(DEFAULT_CONFIG, (items) => {
     config = { ...config, ...items };
     log('Configuration loaded:', config);
-    if (config.enabled) {
+    if (config.hoverEnabled) {
       initialize();
     }
   });
@@ -743,8 +744,8 @@
     if (request.action === 'toggle-sidebar') {
       log('🎹 Keyboard shortcut triggered');
       
-      if (!config.enabled) {
-        log('❌ Extension disabled, ignoring shortcut');
+      if (!config.shortcutEnabled) {
+        log('❌ Keyboard shortcuts disabled, ignoring shortcut');
         return;
       }
       
@@ -790,13 +791,18 @@
       debugArea.classList.toggle('debug', config.debug);
     }
     
-    // Enable/disable toggle
-    if ('enabled' in changes) {
-      if (config.enabled) {
+    // Enable/disable hover feature
+    if ('hoverEnabled' in changes) {
+      if (config.hoverEnabled) {
         initialize();
       } else {
         cleanup();
       }
+    }
+    
+    // Shortcut enable/disable doesn't require reinitialization
+    if ('shortcutEnabled' in changes) {
+      log('Keyboard shortcuts', config.shortcutEnabled ? 'enabled' : 'disabled');
     }
   });
 

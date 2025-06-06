@@ -1,6 +1,7 @@
 // Default settings
 const DEFAULT_SETTINGS = {
-  enabled: true,
+  hoverEnabled: true,
+  shortcutEnabled: true,
   hoverDelay: 200,
   collapseDelay: 500,
   debug: false
@@ -8,44 +9,53 @@ const DEFAULT_SETTINGS = {
 
 // DOM elements
 const elements = {
-  enabled: document.getElementById('enabled'),
+  hoverEnabled: document.getElementById('hoverEnabled'),
+  shortcutEnabled: document.getElementById('shortcutEnabled'),
   hoverDelay: document.getElementById('hoverDelay'),
   collapseDelay: document.getElementById('collapseDelay'),
   debug: document.getElementById('debug'),
   saveButton: document.getElementById('save'),
   resetButton: document.getElementById('reset'),
   reloadLink: document.getElementById('reload-extension'),
-  status: document.getElementById('status')
+  status: document.getElementById('status'),
+  timingSection: document.getElementById('timingSection')
 };
 
 // Load settings
 function loadSettings() {
   chrome.storage.sync.get(DEFAULT_SETTINGS, (items) => {
-    elements.enabled.checked = items.enabled;
+    elements.hoverEnabled.checked = items.hoverEnabled;
+    elements.shortcutEnabled.checked = items.shortcutEnabled;
     elements.hoverDelay.value = items.hoverDelay;
     elements.collapseDelay.value = items.collapseDelay;
     elements.debug.checked = items.debug;
+    
+    // Show/hide timing settings based on hover enabled state
+    toggleTimingSection(items.hoverEnabled);
   });
 }
 
 // Save settings
 function saveSettings() {
   const settings = {
-    enabled: elements.enabled.checked,
+    hoverEnabled: elements.hoverEnabled.checked,
+    shortcutEnabled: elements.shortcutEnabled.checked,
     hoverDelay: parseInt(elements.hoverDelay.value, 10),
     collapseDelay: parseInt(elements.collapseDelay.value, 10),
     debug: elements.debug.checked
   };
   
-  // Validation
-  if (settings.hoverDelay < 0 || settings.hoverDelay > 2000) {
-    showStatus('Hover delay must be between 0-2000 milliseconds', 'error');
-    return;
-  }
-  
-  if (settings.collapseDelay < 0 || settings.collapseDelay > 3000) {
-    showStatus('Collapse delay must be between 0-3000 milliseconds', 'error');
-    return;
+  // Validation (only if hover is enabled)
+  if (settings.hoverEnabled) {
+    if (settings.hoverDelay < 0 || settings.hoverDelay > 2000) {
+      showStatus('Hover delay must be between 0-2000 milliseconds', 'error');
+      return;
+    }
+    
+    if (settings.collapseDelay < 0 || settings.collapseDelay > 3000) {
+      showStatus('Collapse delay must be between 0-3000 milliseconds', 'error');
+      return;
+    }
   }
   
   chrome.storage.sync.set(settings, () => {
@@ -62,6 +72,9 @@ function saveSettings() {
         });
       }
     });
+    
+    // Update timing section visibility
+    toggleTimingSection(settings.hoverEnabled);
   });
 }
 
@@ -145,7 +158,11 @@ function setupAutoSave() {
   };
   
   // Save checkboxes immediately
-  elements.enabled.addEventListener('change', saveSettings);
+  elements.hoverEnabled.addEventListener('change', () => {
+    saveSettings();
+    toggleTimingSection(elements.hoverEnabled.checked);
+  });
+  elements.shortcutEnabled.addEventListener('change', saveSettings);
   elements.debug.addEventListener('change', saveSettings);
   
   // Delayed save for numeric inputs
@@ -183,6 +200,13 @@ function addAnimations() {
 function openShortcutsPage(e) {
   e.preventDefault();
   chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+}
+
+// Toggle timing section visibility
+function toggleTimingSection(hoverEnabled) {
+  if (elements.timingSection) {
+    elements.timingSection.style.display = hoverEnabled ? 'block' : 'none';
+  }
 }
 
 // Initialization

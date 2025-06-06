@@ -11,6 +11,7 @@ A Chrome extension that controls the Claude.ai sidebar with auto-hover and keybo
 - Smart positioning to avoid navigation buttons
 - Configurable hover delays
 - Keyboard shortcut support for manual toggle
+- Individual on/off controls for hover and keyboard features
 
 ## Installation
 
@@ -34,10 +35,24 @@ You can also toggle the sidebar manually using a keyboard shortcut:
 ## Configuration
 
 Click the extension icon to adjust:
-- Hover delay timing
-- Collapse delay timing
-- Keyboard shortcut setup (link to Chrome shortcuts page)
-- Debug mode (shows trigger areas)
+
+### Feature Settings
+- **Enable hover expand**: Turn hover functionality on/off
+- **Enable keyboard shortcuts**: Turn keyboard shortcut functionality on/off
+
+### Timing Settings (when hover is enabled)
+- **Hover delay timing**: Wait time before sidebar expands
+- **Collapse delay timing**: Wait time before sidebar collapses
+
+### Other Settings
+- **Keyboard shortcut setup**: Link to Chrome shortcuts page
+- **Debug mode**: Shows trigger areas and detailed console logs
+
+### Usage Scenarios
+- **Hover only**: Enable hover, disable shortcuts
+- **Shortcuts only**: Disable hover, enable shortcuts  
+- **Both features**: Enable both for maximum convenience
+- **Disabled**: Turn off both to temporarily disable the extension
 
 ## License
 
