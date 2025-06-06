@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Claude Sidebar Controller",
+  "version": "1.0.0",
+  "description": "Control Claude.ai sidebar with auto-hover and keyboard shortcuts for better workflow efficiency",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://claude.ai/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "options.html",
+    "default_title": "Claude Sidebar Controller Settings"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-sidebar": {
+      "description": "Toggle Claude sidebar"
+    }
+  }
+}

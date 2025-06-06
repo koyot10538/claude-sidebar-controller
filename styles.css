@@ -1,0 +1,57 @@
+/* Claude Sidebar Auto Hover Styles */
+
+/* Hover trigger area (left edge positioning) */
+.claude-hover-trigger {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 50px;
+  height: 200px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Custom trigger area */
+.claude-custom-trigger {
+  position: fixed;
+  left: 0;
+  top: 200px;
+  width: 50px;
+  height: calc(100vh - 200px);
+  z-index: 10000;
+  pointer-events: auto;
+  background: transparent;
+}
+
+/* Custom trigger display in debug mode */
+.claude-custom-trigger.debug {
+  background-color: rgba(255, 59, 48, 0.1);
+  border-right: 1px dashed rgba(255, 59, 48, 0.5);
+}
+
+/* Debug mode display */
+.claude-hover-trigger.debug {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px dashed rgba(59, 130, 246, 0.5);
+}
+
+/* Cursor on hover */
+.claude-hover-trigger:hover {
+  cursor: pointer;
+}
+
+/* Sidebar transition effects */
+nav[role="navigation"],
+aside,
+div[class*="fixed"][class*="inset-y-0"][class*="left-0"],
+div[class*="w-64"] {
+  transition: transform 0.3s ease-in-out,
+              opacity 0.3s ease-in-out !important;
+}
+
+/* Responsive support - disabled on mobile */
+@media (max-width: 768px) {
+  .claude-hover-trigger {
+    display: none;
+  }
+}

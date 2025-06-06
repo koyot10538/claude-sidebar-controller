@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Claude Sidebar Controller Settings</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 400px;
+      min-height: 500px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .container {
+      padding: 20px;
+    }
+    
+    .section {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section h2 {
+      margin: 0 0 15px;
+      font-size: 16px;
+      color: #555;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    
+    .option {
+      margin-bottom: 20px;
+    }
+    
+    .option:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+    
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .input-group input[type="number"] {
+      flex: 1;
+    }
+    
+    .input-group .unit {
+      font-size: 14px;
+      color: #777;
+      white-space: nowrap;
+    }
+    
+    .help-text {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    button {
+      flex: 1;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #5a67d8;
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    button.secondary {
+      background-color: #e2e8f0;
+      color: #4a5568;
+    }
+    
+    button.secondary:hover {
+      background-color: #cbd5e0;
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+    
+    .status.success {
+      background-color: #c6f6d5;
+      color: #276749;
+      border: 1px solid #9ae6b4;
+    }
+    
+    .status.error {
+      background-color: #fed7d7;
+      color: #742a2a;
+      border: 1px solid #fc8181;
+    }
+    
+    .debug-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #667eea;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 12px;
+      color: #777;
+    }
+    
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Claude Sidebar Controller</h1>
+    <p>Control sidebar with hover and shortcuts</p>
+  </div>
+  
+  <div class="container">
+    <div class="section">
+      <h2>Basic Settings</h2>
+      
+      <div class="option">
+        <label class="checkbox-label">
+          <label class="toggle-switch">
+            <input type="checkbox" id="enabled">
+            <span class="slider"></span>
+          </label>
+          <span style="margin-left: 10px;">Enable auto-expand</span>
+        </label>
+        <p class="help-text">Automatically expand Claude.ai sidebar when mouse hovers over it</p>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Timing Settings</h2>
+      
+      <div class="option">
+        <label for="hoverDelay">Hover delay time</label>
+        <div class="input-group">
+          <input type="number" id="hoverDelay" min="0" max="2000" step="50">
+          <span class="unit">milliseconds</span>
+        </div>
+        <p class="help-text">Wait time from mouse hover until sidebar expands</p>
+      </div>
+      
+      <div class="option">
+        <label for="collapseDelay">Collapse delay time</label>
+        <div class="input-group">
+          <input type="number" id="collapseDelay" min="0" max="3000" step="50">
+          <span class="unit">milliseconds</span>
+        </div>
+        <p class="help-text">Wait time from mouse leaving until sidebar collapses</p>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Keyboard Shortcuts</h2>
+      
+      <div class="option">
+        <label>Toggle Sidebar</label>
+        <p class="help-text">You can set a custom keyboard shortcut to toggle the sidebar. Go to <a href="#" id="shortcuts-link" style="color: #667eea;">chrome://extensions/shortcuts</a> to configure it.</p>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Debug Settings</h2>
+      
+      <div class="option">
+        <label class="checkbox-label">
+          <input type="checkbox" id="debug">
+          Enable debug mode
+        </label>
+        <p class="help-text">Output detailed logs to console and visualize hover areas</p>
+      </div>
+    </div>
+    
+    <div class="button-container">
+      <button id="save">Save Settings</button>
+      <button id="reset" class="secondary">Reset to Default</button>
+    </div>
+    
+    <div class="status" id="status"></div>
+  </div>
+  
+  <div class="footer">
+    <p>If problems occur, please <a href="#" id="reload-extension">reload the extension</a></p>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>
